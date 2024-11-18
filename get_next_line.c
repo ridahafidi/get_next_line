@@ -36,7 +36,15 @@ char	*savebytes(char *buffer, int position)
     newbuff[position] = '\0';
     return (newbuff);
 }
+char    *seperate(char *buffer, ssize_t position)
+{
+    ssize_t newpos;
+    char *newbuffer;
 
+    newpos = newline_position(buffer, position);
+    newbuffer = savebytes(buffer, newpos);
+    return (newbuffer);
+}
 char	*get_next_line(int fd)
 {
 	ssize_t	readbytes;
@@ -50,7 +58,6 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	readbytes = read(fd, buffer, BUFFER_SIZE);
-	seperate(buffer, readbytes);
-	new_buff = savebytes(buffer, position);
+	new_buff = seperate(buffer, readbytes);
 	return (new_buff);
 }

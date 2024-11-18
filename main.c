@@ -5,43 +5,51 @@
     #include <stdlib.h>
     #include "get_next_line.h"
 
-int	newline_position(char *buffer)
+ssize_t	newline_position(char *buffer, ssize_t position)
 {
-	int	i;
+	ssize_t	save;
 
-	i = 0;
-	while (buffer[i] != '\n')
+	save = -1;
+	while (position)
 	{
-		i++;
+		if (buffer[position] == '\n')
+			save = position;
+		position--;
 	}
-	return (i);
+	return (save);
 }
 
-char	*savebytes(char *buffer, int position)
+char	*savebytes(char *buffer, ssize_t position)
 {
     char *newbuff;
-    int i;
-    
-    i = 0;
+
     newbuff = malloc(sizeof(char) * (position + 1));
     if(!newbuff)
         return (NULL);
-    while(position)
+    newbuff[position + 1] = '\0';
+    while(position >= 0)
     {
-        newbuff[i] = buffer[i];
-        buffer++;
-        newbuff++;
+        newbuff[position] = buffer[position];
         position--;
     }
-    newbuff[position] = '\0';
     return (newbuff);
+}
+char    *seperate(char *buffer, ssize_t position)
+{
+    ssize_t newpos;
+    char *newbuffer;
+
+    newpos = newline_position(buffer, position);
+    newbuffer = savebytes(buffer, newpos);
+
+    return (newbuffer);
 }
 char	*get_next_line(int fd)
 {
 	ssize_t	readbytes;
 	char	*buffer;
 	char	*new_buff;
-	int		position;
+	ssize_t	position;
 
 	if (fd < 0)
 		return (NULL);
@@ -49,10 +57,10 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	readbytes = read(fd, buffer, BUFFER_SIZE);
-	position = newline_position(buffer);
-	new_buff = savebytes(buffer, position);
+	new_buff = seperate(buffer, readbytes);
 	return (new_buff);
 }
+
     int main()
     {
         int fd = open("file.txt",0100);
