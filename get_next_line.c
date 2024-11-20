@@ -2,62 +2,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 
-ssize_t	newline_position(char *buffer, ssize_t position)
+size_t	is_newline(char *buff)
 {
-	ssize_t	save;
+	size_t	i;
 
-	save = -1;
-	while (position)
+	i = 0;
+	while(*buff)
 	{
-		if (buffer[position] == '\n')
-			save = position;
-		position--;
+		if(*buff == '\n')
+			i++;
+		buff++;
 	}
-	return (save);
+	return (i);
 }
 
-char	*savebytes(char *buffer, int position)
-{
-    char *newbuff;
-    int i;
-    
-    i = 0;
-    newbuff = malloc(sizeof(char) * (position + 1));
-    if(!newbuff)
-        return (NULL);
-    while(position)
-    {
-        newbuff[i] = buffer[i];
-        buffer++;
-        newbuff++;
-        position--;
-    }
-    newbuff[position] = '\0';
-    return (newbuff);
-}
-char    *seperate(char *buffer, ssize_t position)
-{
-    ssize_t newpos;
-    char *newbuffer;
-
-    newpos = newline_position(buffer, position);
-    newbuffer = savebytes(buffer, newpos);
-    return (newbuffer);
-}
 char	*get_next_line(int fd)
 {
-	ssize_t	readbytes;
+	char 	*line;
 	char	*buffer;
-	char	*new_buff;
-	ssize_t	position;
+	char	*save_buff;
+	ssize_t	readbytes;
 
-	if (fd < 0)
+	if(fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
 		return (NULL);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	readbytes = read(fd, buffer, BUFFER_SIZE);
-	new_buff = seperate(buffer, readbytes);
-	return (new_buff);
+	while ((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		if (!is_newline(buffer) && readbytes != BUFFER_SIZE)
+			buffer = strjoin(save_buff, buffer);
+		save_buff = strdup(buffer);
+		if (is_newline == 1)
+			return (buffer);
+		
+
+	}
 }
