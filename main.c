@@ -8,6 +8,7 @@
         if(!str)
             exit(1);
         str = get_next_line(fd);
+        //str = get_next_line(fd);
         printf("%s", str);
         close(fd);
         return 0;

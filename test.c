@@ -1,24 +1,21 @@
-int	afternewline(char *buff)
+#include <stddef.h>
+
+size_t	is_newline(char *buff)
 {
-	int	i;
-	int	j;
+	size_t	i;
 
 	i = 0;
-	while (buff[i])
+	while (*buff)
 	{
-		if (buff[i] == '\n')
-			{
-                i++;;
-                if (buff[i])
-                    return (1);
-            }
-		i++;
+		if (*buff == '\n')
+			i++;
+		buff++;
 	}
-	return (0);
+	return (i);
 }
 #include <stdio.h>
 int main()
 {
-    char buffer [20] = "abcdefsdsdsdsd\n";
-    printf("%d", afternewline(buffer));
+    char buffer [50] = "abcdefsdsdsdsd\n\n  asdasd  \ndasd\nasd\n";
+    printf("%zu", is_newline(buffer));
 }

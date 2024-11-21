@@ -24,8 +24,7 @@ int	afternewline(char *buff)
 		if (buff[i] == '\n')
 		{
 			i++;
-			;
-			if (buff[i])
+			if (buff[i] != '\0')
 				return (1);
 		}
 		i++;
@@ -55,17 +54,17 @@ void	fill(char *s1, char *s2, size_t len)
 		len--;
 	}
 }
-char	*takecareofthis(char *buff)
+char	*takecareofthis(char *buff, char *save_buff)
 {
 	char			*newbuff;
-	static size_t	save_len;
-	static char		*save_buff;
+	size_t	save_len;
 
-	save_buff = NULL;
 	if (save_buff)
 		buff = ft_strjoin(save_buff, buff);
 	save_len = lencounter(buff);
-	if(save_len)
+	printf("%s", buff);
+	exit(1);
+	if(save_len > 0)
 	{
 		newbuff = malloc(sizeof(char) * (save_len + 1));
 		if (!newbuff)
@@ -80,15 +79,15 @@ char	*get_next_line(int fd)
 {
 	char	*line;
 	char	*buffer;
-	char	*save_buff;
+	static char	*save_buff;
 	ssize_t	readbytes;
 
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	buffer[BUFFER_SIZE] = '\0';
 	if (!buffer)
 		return (NULL);
-	if (fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
-		return (NULL);
+	// if (fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
+	// 	return (NULL);
 	while ((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		if (!is_newline(buffer) && readbytes != BUFFER_SIZE)
@@ -98,7 +97,7 @@ char	*get_next_line(int fd)
 			return (buffer);
 		else
 		{
-			buffer = takecareofthis(buffer);
+			buffer = takecareofthis(buffer, save_buff);
 			return (buffer);
 		}
 	}
