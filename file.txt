@@ -1,5 +1,5 @@
-sdasdaskdhasd
-ksalhdjasdjalskdals;dasnhk;djasd
+sdasdaskdhas
+ksalhdjasdjalskdals;dasnhk;djasd  
 as;fjdfjksl;dkal;gja;dasnhk
 
 aslkdjals;jgal;sdkas'k;ga;sdkasaslj
@@ -11,3 +11,11 @@ aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
 aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
 aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
 aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
+
+
+ksalhdjasdjalskdals;dasnhk;djasd
+save buff-> 1
+merge buffer with save_buff
+
+save_buff before buffer;
+
