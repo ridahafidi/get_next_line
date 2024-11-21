@@ -83,11 +83,11 @@ char	*get_next_line(int fd)
 	char	*save_buff;
 	ssize_t	readbytes;
 
-	if (fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
-		return (NULL);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	buffer[BUFFER_SIZE] = '\0';
 	if (!buffer)
+		return (NULL);
+	if (fd < 0 || read(fd, buffer, BUFFER_SIZE) <= 0)
 		return (NULL);
 	while ((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
