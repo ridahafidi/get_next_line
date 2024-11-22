@@ -4,11 +4,13 @@ char	*ft_strdup(const char *s)
 {
 	size_t	len;
 	char	*str;
+	char	*stro;
 
 	len = ft_strlen(s);
 	str = malloc(sizeof(char) * (len + 1));
 	if (str == NULL)
 		return (NULL);
+	stro = str;
 	while(len)
     {
         *str = *s;
@@ -17,7 +19,7 @@ char	*ft_strdup(const char *s)
         len--;
     }
     *str = '\0';
-	return (str);
+	return (stro);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -69,4 +71,25 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*str;
+
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (len > ft_strlen(s + start))
+		len = ft_strlen(s + start);
+	str = malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
+		return (NULL);
+	s += start;
+	while (len)
+	{
+		*str = *s;
+		str++;
+		s++;
+		len--;
+	}
+	return (str);
 }

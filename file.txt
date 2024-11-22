@@ -1,21 +1,10 @@
-sdasdaskdhas
-ksalhdjasdjalskdalsdasnhkdjasd  
-as;fjdfjksl;dkal;gja;dasnhk
+sdasdaskdhas asdasdasdfasfxcasdasd
+ksalhdjasdja
+lskdalsdasnh
+djasdas;fjdf
+ksl;dkal;gja
+dasnhk
 
-aslkdjals;jgal;sdkas'k;ga;sdkasaslj
-as;ldas;'gkasdas'fkdgjasd
-aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasdaksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
-aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasdaksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
-aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
-
-aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
-aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
-aksdjhka;v/am,s mk.aiosj;mnv,mdsabjknafkalsmgasfasdasdasdasdasd
-
-
-ksalhdjasdjalskdals;dasnhk;djasd
-save buff-> 1
-merge buffer with save_buff
-
-save_buff before buffer;
+sdasdaskdhasasdasdasdfas\n
+asdasdasd
 
