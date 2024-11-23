@@ -2,24 +2,24 @@
 
 char	*extractline(char *str)
 {
+	char	*line;
 	size_t	len;
-	static size_t start;
-	char 	*line;
-	
+	static size_t	start;
+
 	len = 0;
-	while (str[len])
+	while(str[len])
 	{
-		if (str[len] == '\n')
-		{
-			start++;
-			break;
-		}
-		start++;
+		if(str[len] == '\n')
+			{
+				break;
+			}
 		len++;
 	}
-	line = ft_substr(str, start,len);
-	printf("%s", line);
-	exit(1);
+	printf("len = %zu\n", len);
+	printf("str = %s\n", str);
+	line = ft_substr(str, start, len);
+	start += len + 1;
+	printf("start = %zu\n", start);
 	return (line);
 }
 
@@ -27,21 +27,20 @@ char	*get_line(int fd, char *buffer, char *save_buff)
 {
 	ssize_t	readbytes;
 	char	*line;
-	char	*newlinepos;
 
-	while((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
+	while ((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
-		if(!save_buff)
+		if (!save_buff)
 			save_buff = ft_strdup(buffer);
 		else
 			save_buff = ft_strjoin(save_buff, buffer);
-		if(ft_strchr(save_buff, '\n'))
+		if (ft_strchr(save_buff, '\n'))
 		{
 			line = extractline(save_buff);
 			return (line);
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)

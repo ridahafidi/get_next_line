@@ -72,24 +72,27 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*str;
+	size_t	i;
 
+	if (!s)
+		return (NULL);
 	if (start >= ft_strlen(s))
 		return (ft_strdup(""));
 	if (len > ft_strlen(s + start))
 		len = ft_strlen(s + start);
 	str = malloc(sizeof(char) * (len + 1));
-	if (str == NULL)
+	if (!str)
 		return (NULL);
-	s += start;
-	while (len)
+	i = 0;
+	while (i < len && s[start + i])
 	{
-		*str = *s;
-		str++;
-		s++;
-		len--;
+		str[i] = s[start + i];
+		i++;
 	}
+	str[i] = '\0';
 	return (str);
 }
