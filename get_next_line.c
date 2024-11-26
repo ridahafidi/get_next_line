@@ -6,94 +6,138 @@
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:03:40 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/25 21:39:58 by rhafidi          ###   ########.fr       */
+/*   Updated: 2024/11/26 23:36:17 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char	*extractline(char *str, size_t *start)
+size_t	len_counter(t_list *save_buff)
+{
+	size_t	len;
+	size_t	i;
+
+	len = 0;
+	while (save_buff)
+	{
+		i = 0;
+		while (save_buff->save[i] && save_buff->save[i] != '\n')
+			i++;
+		len += i;
+		if (save_buff->save[i] == '\n')
+		{
+			len++;
+			break ;
+		}
+		else
+			save_buff = save_buff->next;
+	}
+	return (len);
+}
+
+t_list	*append_to_list(t_list **save_buff, char *buffer)
+{
+	t_list	*new_node;
+	t_list	*current;
+
+	new_node = malloc(sizeof(t_list));
+	if (!new_node)
+		return (NULL);
+	new_node->save = ft_strdup(buffer);
+	if (!new_node->save)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->next = NULL;
+	if (!(*save_buff))
+	{
+		*save_buff = new_node;
+		return (new_node);
+	}
+	current = (*save_buff);
+	while (current->next)
+		current = current->next;
+	current->next = new_node;
+	return (*save_buff);
+}
+
+char	*fill_line(char *tmp_line, size_t len, t_list **save_buff)
+{
+	t_list	*tmp_save;
+	size_t	i;
+	size_t	j;
+	
+	i = 0;
+	while ((*save_buff)->save)
+	{
+		j = 0;
+		while ((*save_buff)->save[j] != '\0' && len >= 0)
+		{
+			tmp_line[i] = (*save_buff)->save[j];
+			len--;
+			j++;
+			i++;
+		}
+		if (!ft_strchr((*save_buff)->save, '\n'))
+		{
+			tmp_save = (*save_buff)->next;
+			ft_lstdelone(*save_buff, &delete);
+			(*save_buff) = tmp_save;
+		}
+		else
+		{
+			ft_lstdelone(tmp_save, &delete);
+		}
+		if ((*save_buff)->save[j] == '\n')
+			break ;
+		tmp_save = (*save_buff);
+	}
+	return (tmp_line);
+}
+
+char	*extract_line(t_list **save_buff)
 {
 	char	*line;
-	int		newline;
 	size_t	len;
 
-	newline = 0;
-	len = 0;
-	if (!str || !start)
-		return (NULL);
-	while (str[*start + len] && str[*start + len] != '\n')
-		len++;
-	if (str[*start + len] == '\n')
+	len = len_counter(*save_buff);
+	if (len)
 	{
-		line = ft_substr(str, *start, len + 1);
-		newline = 1;
+		line = malloc(sizeof(char) * (len + 1));
+		if (!line)
+			return (NULL);
+		line[len] = '\0';
+		len--;
+		line = fill_line(line, len, save_buff);
+		return (line);
 	}
-	else
-		line = ft_substr(str, *start, len);
-	*start += len + newline;
-	return (line);
-}
-static char	*get_rest_of_savebuff(char **save_buff, size_t *start)
-{
-	char	*line;
-
-	line = extractline(*save_buff, start);
-	if (*line == '\0')
-	{
-		free(*save_buff);
-		*save_buff = NULL;
-		free(line);
-		return (NULL);
-	}
-	return (line);
-}
-
-static char	*get_line(int fd, char *buffer, char **save_buff)
-{
-	ssize_t			readbytes;
-	char			*line;
-	static size_t	start;
-
-	line = NULL;
-	while ((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
-	{
-		buffer[readbytes] = '\0';
-		if (!*save_buff)
-			*save_buff = ft_strdup(buffer);
-		else
-			*save_buff = ft_strjoin(*save_buff, buffer);
-		if (ft_strchr(*save_buff + start, '\n'))
-		{
-			line = extractline(*save_buff, &start);
-			free(buffer);
-			return (line);
-		}
-	}
-	if (readbytes == 0 && !save_buff)
-		return (NULL);
-	if (*save_buff && (*save_buff + start) != '\0')
-		line = get_rest_of_savebuff(save_buff, &start);
-	free(buffer);
-	return (line);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*buffer;
-	char		*line;
-	static char	*save_buff;
+	char			*line;
+	char			*buffer;
+	ssize_t			readbytes;
+	static t_list	*save_buff;
 
+	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	line = get_line(fd, buffer, &save_buff);
-	if (!line && save_buff)
+	while ((readbytes = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
-		free(save_buff);
-		save_buff = NULL;
+		buffer[readbytes] = '\0';
+		save_buff = append_to_list(&save_buff, buffer);
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
+	free(buffer);
+	if (readbytes < 0 || (!readbytes && !save_buff))
+		return (NULL);
+	line = extract_line(&save_buff);
 	return (line);
 }

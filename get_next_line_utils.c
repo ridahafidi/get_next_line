@@ -6,60 +6,29 @@
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:03:47 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/25 21:43:18 by rhafidi          ###   ########.fr       */
+/*   Updated: 2024/11/26 22:15:52 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strdup(const char *s)
+t_list	*ft_lstnew(char *save)
 {
-	size_t	len;
-	char	*str;
-	char	*stro;
+	t_list	*root;
 
-	len = ft_strlen(s);
-	str = malloc(sizeof(char) * (len + 1));
-	if (str == NULL)
+	root = malloc(sizeof(t_list));
+	if (root == NULL)
 		return (NULL);
-	stro = str;
-	while (len)
-	{
-		*stro = *s;
-		stro++;
-		s++;
-		len--;
-	}
-	*stro = '\0';
-	return (str);
+	root->save = save;
+	root->next = NULL;
+	return (root);
 }
-
-char	*ft_strjoin(char const *s1, char const *s2)
+void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	int		i;
-	int		len1;
-	int		len2;
-	char	*str;
-
-	if (!s1 && !s2)
-		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	str = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
-	if (str == NULL)
-		return (NULL);
-	i = -1;
-	while (s1[++i])
-		str[i] = s1[i];
-	i = -1;
-	while (s2[++i])
-	{
-		str[len1] = s2[i];
-		len1++;
-	}
-	str[len1] = '\0';
-	free((void *)s1);
-	return (str);
+	if (!lst || !del)
+		return ;
+	del(lst->save);
+	free(lst);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -74,37 +43,31 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s);
 	return (NULL);
 }
-
-size_t	ft_strlen(const char *s)
+void delete (void *s)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	free(s);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_strdup(const char *s)
 {
+	size_t	len;
 	char	*str;
-	size_t	i;
+	char	*stro;
 
-	if (!s)
-		return (NULL);
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(s + start))
-		len = ft_strlen(s + start);
+	len = 0;
+	while(s[len])
+		len++;
 	str = malloc(sizeof(char) * (len + 1));
-	if (!str)
+	if (str == NULL)
 		return (NULL);
-	i = 0;
-	while (i < len && s[start + i])
+	stro = str;
+	while (len)
 	{
-		str[i] = s[start + i];
-		i++;
+		*stro = *s;
+		stro++;
+		s++;
+		len--;
 	}
-	str[i] = '\0';
+	*stro = '\0';
 	return (str);
 }
