@@ -6,68 +6,83 @@
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:03:47 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/26 22:15:52 by rhafidi          ###   ########.fr       */
+/*   Updated: 2024/11/28 23:17:31 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_list	*ft_lstnew(char *save)
+t_list	*lastnode(t_list *list)
 {
-	t_list	*root;
-
-	root = malloc(sizeof(t_list));
-	if (root == NULL)
+	if (!list)
 		return (NULL);
-	root->save = save;
-	root->next = NULL;
-	return (root);
-}
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
-{
-	if (!lst || !del)
-		return ;
-	del(lst->save);
-	free(lst);
+	while (list->next)
+		list = list->next;
+	return (list);
 }
 
-char	*ft_strchr(const char *s, int c)
+int	new_line(t_list *list)
 {
-	while (*s)
+	int	i;
+
+	while (list)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
+		i = 0;
+		while (list->save[i] && i < BUFFER_SIZE)
+		{
+			if (list->save[i] == '\n')
+				return (1);
+			i++;
+		}
+		list = list->next;
 	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
-}
-void delete (void *s)
-{
-	free(s);
+	return (0);
 }
 
-char	*ft_strdup(const char *s)
+size_t	length_to_newline (t_list *list)
 {
+	int		i;
 	size_t	len;
-	char	*str;
-	char	*stro;
 
 	len = 0;
-	while(s[len])
-		len++;
-	str = malloc(sizeof(char) * (len + 1));
-	if (str == NULL)
-		return (NULL);
-	stro = str;
-	while (len)
+	while(list)
 	{
-		*stro = *s;
-		stro++;
-		s++;
-		len--;
+		i = 0;
+		while(list->save[i] && i < BUFFER_SIZE)
+		{
+			if (list->save[i] == '\n')
+			{
+				len++;
+				return (len);
+			}
+			len++;
+			i++;
+		}
+		list = list->next;
 	}
-	*stro = '\0';
-	return (str);
+	return (len);
+}
+
+void	copy_the_line(char *line, t_list *list)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (list)
+	{
+		i = 0;
+		while (list->save[i] && list->save[i] != '\n')
+		{
+			line[j] = list->save[i];
+			i++;
+			j++;
+		}
+		if (list->save[i] == '\n')
+		{
+			line[j] = list->save[i];
+			break;
+		}
+		list = list->next;
+	}
 }
