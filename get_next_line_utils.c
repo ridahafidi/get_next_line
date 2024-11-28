@@ -6,13 +6,13 @@
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:03:47 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:17:31 by rhafidi          ###   ########.fr       */
+/*   Updated: 2024/11/29 00:54:28 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_list	*lastnode(t_list *list)
+t_list	*findlastnode(t_list *list)
 {
 	if (!list)
 		return (NULL);
@@ -84,5 +84,27 @@ void	copy_the_line(char *line, t_list *list)
 			break;
 		}
 		list = list->next;
+	}
+}
+
+void	free_malloc(t_list **list, t_list *newnode, char *buff)
+{
+	t_list	*tmp;
+	
+	if(!*list)
+		return ;
+	while(*list)
+	{
+		tmp = (*list)->next;
+		free((*list)->save);
+		*list = tmp;
+	}
+	*list = NULL;
+	if (newnode->save[0])
+		*list = newnode;
+	else
+	{
+		free(buff);
+		free(newnode);
 	}
 }

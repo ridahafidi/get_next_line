@@ -6,7 +6,7 @@
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:03:40 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/28 23:25:45 by rhafidi          ###   ########.fr       */
+/*   Updated: 2024/11/29 00:57:27 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@ void	append_to_list(t_list **list, char *buff)
 	t_list	*new_node;
 	t_list	*last_node;
 
-	last_node = lastnode(*list);
+	last_node = findlastnode(*list);
 	new_node = malloc(sizeof(t_list));
 
 	if (!new_node)
-		return (NULL);
+		return ;
 	if (!last_node)
 		*list = new_node;
 	else
@@ -38,7 +38,7 @@ void	create_list(t_list **list,int fd)
 	{
 		buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (!buffer)
-			return (NULL);
+			return ;
 		readbytes = read(fd, buffer, BUFFER_SIZE);
 		if (readbytes <= 0)
 		{
@@ -46,7 +46,7 @@ void	create_list(t_list **list,int fd)
 			return ;
 		}
 		buffer[readbytes] = '\0';
-		append_to_list(&list, buffer);
+		append_to_list(list, buffer);
 	}
 }
 
@@ -66,23 +66,28 @@ char	*get_line(t_list **list)
 
 void	trimlist(t_list **list)
 {
-	t_list	*current;
-	t_list	*next;
+	t_list	*lastnode;
+	t_list	*newnode;
+	char 	*buff;
+	int		i;
+	int		j;
 
-	while(*list)
-	{
-		if(new_line(*list))
-			break;
-		else
-			{
-				next = (*list)->next;
-				(*list)->save = NULL;
-				free(*list);
-				*list = next;
-				free(next); 
-			}
-		*list = (*list)->next;
-	}
+	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	newnode = malloc(sizeof(t_list));
+	if(!buff || !newnode)
+		return ;
+	lastnode = findlastnode(*list);
+	i = 0;
+	j = 0;
+	while(lastnode->save[i] && lastnode->save[i] != '\n')
+		i++;
+	while(lastnode->save[i])
+		buff[j++] = lastnode->save[i++];
+	printf("buff = %s\n", buff);
+	buff[j] = '\0';
+	newnode->save = buff;
+	newnode->next = NULL;
+	free_malloc(list, newnode, buff);
 }
 
 char	*get_next_line(int fd)
@@ -90,10 +95,15 @@ char	*get_next_line(int fd)
 	static t_list	*list;
 	char			*line;
 	
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, BUFFER_SIZE) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	create_list(&list, fd);
+	if (!list)
+		return (NULL);
 	line = get_line(&list);
+	printf("%s", line);
+	printf("save before = %s\n", list->save);
 	trimlist(&list);
+	printf("saveafter = %s\n", list->save);
 	return (line);
 }
