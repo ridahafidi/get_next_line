@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/24 17:03:47 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/29 18:06:58 by rhafidi          ###   ########.fr       */
+/*   Created: 2024/11/29 20:20:56 by rhafidi           #+#    #+#             */
+/*   Updated: 2024/11/29 20:21:30 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 t_list	*findlastnode(t_list *list)
 {

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/24 17:03:40 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/29 18:47:47 by rhafidi          ###   ########.fr       */
+/*   Created: 2024/11/29 20:20:47 by rhafidi           #+#    #+#             */
+/*   Updated: 2024/11/30 18:27:18 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	append_to_list(t_list **list, char *buff)
 {
@@ -92,15 +92,16 @@ void	trimlist(t_list **list)
 
 char	*get_next_line(int fd)
 {
-	static t_list	*list;
+	static t_list	*list[1024];
 	char			*line;
 	
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
-	create_list(&list, fd);
-	if (!list)
+	create_list(&list[fd], fd);
+	if (!list[fd])
 		return (NULL);
-	line = get_line(&list);
-	trimlist(&list);
+	line = get_line(&list[fd]);
+	trimlist(&list[fd]);
 	return (line);
 }
+
