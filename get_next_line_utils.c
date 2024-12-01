@@ -6,7 +6,7 @@
 /*   By: rhafidi <rhafidi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 17:03:47 by rhafidi           #+#    #+#             */
-/*   Updated: 2024/11/29 18:06:58 by rhafidi          ###   ########.fr       */
+/*   Updated: 2024/12/01 15:23:09 by rhafidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ int	new_line(t_list *list)
 	return (0);
 }
 
-size_t	length_to_newline (t_list *list)
+size_t	length_to_newline(t_list *list)
 {
 	int		i;
 	size_t	len;
 
 	len = 0;
-	while(list)
+	while (list)
 	{
 		i = 0;
-		while(list->save[i] && i < BUFFER_SIZE)
+		while (list->save[i] && i < BUFFER_SIZE)
 		{
 			if (list->save[i] == '\n')
 			{
@@ -81,7 +81,7 @@ void	copy_the_line(char *line, t_list *list)
 		if (list->save[i] == '\n')
 		{
 			line[j] = list->save[i];
-			break;
+			break ;
 		}
 		list = list->next;
 	}
@@ -90,10 +90,10 @@ void	copy_the_line(char *line, t_list *list)
 void	free_malloc(t_list **list, t_list *newnode, char *buff)
 {
 	t_list	*tmp;
-	
-	if(!(*list))
+
+	if (!(*list))
 		return ;
-	while(*list)
+	while (*list)
 	{
 		tmp = (*list)->next;
 		free((*list)->save);
